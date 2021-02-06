@@ -1,13 +1,13 @@
-use actix_web::{HttpResponse, Responder};
-use serde::{Deserialize, Serialize};
+use actix_web::{HttpResponse, Responder, web};
 
-#[derive(Deserialize, Serialize)]
-struct IndexJsonRes {
-    title: String,
-}
+use super::posts_models::Post;
 
-pub async fn index() -> impl Responder {
-    HttpResponse::Ok().json(IndexJsonRes {
-        title: "Hello!".to_string(),
+pub async fn find_by_id(web::Path(id): web::Path<u64>) -> impl Responder {
+    let user = Post::by_id(id);
+
+    HttpResponse::Ok().json(Post {
+        id: user.id,
+        title: user.title.to_string(),
+        body: user.body.to_string(),
     })
 }

@@ -16,7 +16,7 @@ async fn main() -> io::Result<()> {
                 web::scope("/api")
                     .service(
                         web::scope("/posts")
-                            .route("", web::get().to(posts_views::index))
+                            .route("/{id}", web::get().to(posts_views::find_by_id))
                     )
             )
             .default_service(

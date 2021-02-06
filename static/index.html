@@ -1,5 +1,12 @@
 <div id="vm">
-  <h1>{{ title }}</h1>
+  <form @submit.prevent="fetchPostData()">
+    <input
+      type="number"
+      v-model="id"
+    />
+  </form>
+
+  <p>{{ displayPostData }}</p>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -8,20 +15,34 @@
 new Vue({
   el: '#vm',
   data: {
-    title: '',
+    id: 1,
+    post: {
+      id: '',
+      title: '',
+      body: '',
+    },
   },
-  created() {
-    const options = {
-      headers: {
-        'Accept': 'application/json',
-      },
-      method: 'GET',
-      url: 'api/posts',
-    };
+  methods: {
+    fetchPostData() {
+      const options = {
+        headers: {
+          'Accept': 'application/json',
+        },
+        method: 'GET',
+        url: `api/posts/${this.id}`,
+      };
 
-    axios(options)
-      .then(({ data }) => this.title = data.title)
-      .catch(err => console.error(err));
+      axios(options)
+        .then(({ data }) => this.post = data)
+        .catch(err => console.error(err));
+    },
+  },
+  computed: {
+    displayPostData() {
+      const { id, title, body } = this.post;
+
+      return `id: ${id}, title: ${title}, body: ${body}`;
+    },
   },
 });
 </script>

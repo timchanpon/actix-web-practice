@@ -1,0 +1,10 @@
+version: '3'
+services:
+  mysql:
+    container_name: db
+    env_file: ./docker/mysql/.env
+    image: mysql:8.0
+    ports:
+      - '3310:3306'
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
