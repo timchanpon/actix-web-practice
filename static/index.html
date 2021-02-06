@@ -1,0 +1,27 @@
+<div id="vm">
+  <h1>{{ title }}</h1>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script>
+new Vue({
+  el: '#vm',
+  data: {
+    title: '',
+  },
+  created() {
+    const options = {
+      headers: {
+        'Accept': 'application/json',
+      },
+      method: 'GET',
+      url: 'api/posts',
+    };
+
+    axios(options)
+      .then(({ data }) => this.title = data.title)
+      .catch(err => console.error(err));
+  },
+});
+</script>
