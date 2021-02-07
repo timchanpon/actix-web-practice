@@ -3,6 +3,8 @@
     <input
       type="number"
       v-model="id"
+      min="1"
+      :max="idLenMax"
     />
   </form>
 
@@ -16,11 +18,14 @@ new Vue({
   el: '#vm',
   data: {
     id: 1,
+    idLenMax: 1,
     post: {
-      id: '',
       title: '',
       body: '',
     },
+  },
+  created() {
+    this.fetchPostData();
   },
   methods: {
     fetchPostData() {
@@ -33,15 +38,18 @@ new Vue({
       };
 
       axios(options)
-        .then(({ data }) => this.post = data)
+        .then(({ data }) => {
+          this.idLenMax = data.count_posts;
+          this.post = data;
+        })
         .catch(err => console.error(err));
     },
   },
   computed: {
     displayPostData() {
-      const { id, title, body } = this.post;
+      const { title, body } = this.post;
 
-      return `id: ${id}, title: ${title}, body: ${body}`;
+      return `title: ${title}, body: ${body}`;
     },
   },
 });

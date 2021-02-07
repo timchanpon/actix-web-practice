@@ -1,10 +1,9 @@
 use diesel::prelude::*;
-use serde::{Deserialize, Serialize};
 
 use crate::db::connection::establish_connection;
 use crate::db::schema::posts;
 
-#[derive(Debug, Deserialize, Queryable, Serialize)]
+#[derive(Debug, Queryable)]
 pub struct Post {
     pub id: u64,
     pub title: String,
@@ -12,6 +11,14 @@ pub struct Post {
 }
 
 impl Post {
+    pub fn all() -> Vec<Post> {
+        let connection = establish_connection();
+
+        posts::dsl::posts
+            .load::<Post>(&connection)
+            .expect("Post is not found.")
+    }
+
     pub fn by_id(id: u64) -> Post {
         let connection = establish_connection();
 
